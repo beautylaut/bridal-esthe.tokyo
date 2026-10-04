@@ -10,7 +10,7 @@ npm run build
 npm run dev
 ```
 
-http://localhost:3000 を開いてください。停止は Ctrl+C。
+http://localhost:3001 を開いてください。停止は Ctrl+C。
 
 本文の編集は `public` 内の各ページの `index.html`、デザインは `public/assets/style.css` です。編集後は `npm run build` を実行し、ブラウザーを更新してください。
 

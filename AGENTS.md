@@ -9,7 +9,7 @@
 ## コマンド
 
 - `npm run build`: publicをdistへ出力
-- `npm run dev`: http://localhost:3000
+- `npm run dev`: http://localhost:3001
 - `npm run typecheck`: 配信サーバーとブラウザー用JavaScriptの型チェック
 - `npm run lint`: JavaScriptのlint
 - `npm test`: 移行したページの内部参照と構造の検証
