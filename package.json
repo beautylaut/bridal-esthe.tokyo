@@ -1,0 +1,5 @@
+{
+  "name": "bridal-esthe-laut", "version": "1.0.0", "private": true, "type": "module",
+  "scripts": {"build":"node scripts/build.mjs", "dev":"node scripts/serve.mjs", "lint":"eslint scripts public/assets/site.js", "typecheck":"tsc --allowJs --checkJs --noEmit --target es2022 --module nodenext --skipLibCheck scripts/serve.mjs public/assets/site.js", "test":"node scripts/verify.mjs"},
+  "devDependencies": {"cheerio":"1.1.2", "eslint":"9.36.0", "typescript":"5.9.3", "@types/node":"24.5.2"}
+}
