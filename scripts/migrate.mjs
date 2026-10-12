@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {load} from 'cheerio';
+import {homeTitle, homeDescription, salonIntroduction, salonLocation} from './salon-content.mjs';
 const origin='https://bridal-esthe.tokyo';
 const pages=[['home','/','HOME'],['about','/pages/about','ABOUT'],['about-service','/pages/about-service','SERVICE'],['frontpage','/collections/frontpage','COSME'],['contact','/pages/contact','CONTACT'],['faq','/pages/faq','FAQ'],['refund-policy','/policies/refund-policy','返金ポリシー'],['privacy-policy','/policies/privacy-policy','プライバシーポリシー']];
 const images=new Map();
@@ -29,8 +30,10 @@ for(const [name,route,label] of pages){const $=load(await fs.readFile(`migration
     if(!heading&&!rte)return;if(heading.includes('ご予約はLINE'))return;
     body+=`<section class="${image?'feature':'prose'}">${image?`<img src="${asset(image)}" alt="${escape(heading)}" loading="lazy" width="750" height="750">`:''}<div>${heading?`<h2>${escape(heading)}</h2>`:''}${rte}${image?'<a class="text-link" href="/pages/about">施術内容について →</a>':''}</div></section>`;
   });}
+  if(name==='home')body+=salonIntroduction;
+  if(name==='contact')body=body.replace('<h3>BEAUTY LAUT</h3>','<h3>BEAUTY LAUT</h3>'+salonLocation);
   if(!body.includes('<h1>'))body=body.replace(/<h2>([\s\S]*?)<\/h2>/,'<h1>$1</h1>');
-  const description=$('meta[name="description"]').attr('content')||'美肌と小顔に特化したブライダルエステ出張サービス。';await write(route,document(name==='home'?'最高の日を最高の自分で。':label,route,body,description));
+  const description=name==='home'?homeDescription:($('meta[name="description"]').attr('content')||'美肌と小顔に特化したブライダルエステ出張サービス。');await write(route,document(name==='home'?homeTitle:label,route,body,description));
 }
 for(const p of products){const route='/products/'+p.handle;await write(route,document(p.title,route,`<section class="product-detail"><div>${p.images.map(im=>`<img src="${asset(im.src)}" alt="${escape(p.title)}" loading="lazy" width="600" height="600">`).join('')}</div><div><p class="eyebrow">COSME</p><h1>${escape(p.title)}</h1><p class="price">¥${Number(p.variants[0].price).toLocaleString('ja-JP')}</p><p>ご購入・在庫の確認はLINEからお問い合わせください。</p><a class="button" href="https://lin.ee/TQHW3Hf">商品について問い合わせる ↗</a><div class="product-copy">${clean(p.body_html)}</div></div></section>` ,p.title));}
 await fs.mkdir('migration',{recursive:true});await fs.writeFile('migration/images.json',JSON.stringify([...images].map(([url,file])=>({url,file})),null,2));
